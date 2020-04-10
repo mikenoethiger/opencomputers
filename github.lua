@@ -19,5 +19,5 @@ if #args > 1 then
     filename = " " .. args[2]
 end
 
-result = shell.execute("wget -f " .. prog_url() .. filename)
+result = shell.execute("wget -f " .. prog_url(args[1]) .. filename)
 print(result)
