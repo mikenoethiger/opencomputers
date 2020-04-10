@@ -17,7 +17,7 @@ end
 local filename = ""
 local url = prog_url(args[1])
 
-if not string.endswith(url, ".lua") then
+if not string.find(url, ".lua$") then
     url = url .. ".lua"
 end
 if #args > 1 then
