@@ -42,7 +42,7 @@ function buildSquare()
             robot.turnRight()
             robot.place(sides.front)
             robot.turnLeft()
-            edges++
+            edges += 1
         end
         robot.turnRight()
     end
