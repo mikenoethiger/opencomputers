@@ -45,3 +45,32 @@ if not turnUntilSolidInFront() then
     io.write("could not find solid")
     return
 end
+
+-- turnRight
+-- placeFront
+-- back
+-- turnLeft
+-- detect
+--
+
+function build()
+    robot.turnRight()
+    while robot.back() do
+        robot.place(sides.front)
+        robot.turnLeft()
+        if not robot.detect() then
+            -- go around edge
+            robot.forward()
+            robot.turnRight()
+        end
+        robot.turnRight()
+    end
+
+    -- finished round
+    robot.up()
+    robot.placeDown()
+end
+
+build()
+
+io.write("finished!")
