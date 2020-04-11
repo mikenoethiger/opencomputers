@@ -35,10 +35,10 @@ end
 function ensureMaterialInSelectedSlot()
     -- ensures that the selected slot contains some material.
     -- returns false if no material left
-    if robot.count() then return true end
+    if robot.count() > 0 then return true end
     c = robot.count()
     for i=1,c,1 do
-        if robot.count(i) then
+        if robot.count(i) > 0 then
             robot.select(i)
             return true
         end
