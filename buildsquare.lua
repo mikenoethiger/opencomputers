@@ -42,7 +42,7 @@ function buildSquare()
             robot.turnRight()
             robot.place(sides.front)
             robot.turnLeft()
-            edges += 1
+            edges = edges + 1
         end
         robot.turnRight()
     end
@@ -72,11 +72,11 @@ if #args > 0 then
     rounds = tonumber(args[1])
 end
 
-io.write("Starting to build (" .. rounds .. " rounds requested)")
+io.write("Starting to build, " .. rounds .. " rounds\n")
 
 for i = 1,rounds,1 do
     io.write(i .. ". round...\n")
-    buildRound()
+    buildSquare()
 end
 
 io.write("finished!\n")
