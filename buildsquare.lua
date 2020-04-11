@@ -81,7 +81,7 @@ end
 
 rounds = 1
 if #args > 0 then
-    rounds = args[1]
+    rounds = tonumber(args[1])
 end
 
 for i = 1,rounds,1 do
