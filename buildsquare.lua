@@ -46,13 +46,13 @@ function ensureMaterialInSelectedSlot()
     return false
 end
 
-function placeOrFail()
+function placeOrFail(side)
     if not ensureMaterialInSelectedSlot() then
         io.write("No material left in inventory, aborting.\n")
         os.exit()
     end
-    bool, reason = robot.place(sides.front)
-    if not robot.place(sides.front) then
+    bool, reason = robot.place(side)
+    if not bool then
         io.write("Could not place block: " .. reason .. ", aborting\n")
         os.exit()
     end
@@ -61,19 +61,19 @@ end
 function buildSquare()
     edges = 0
     robot.turnRight()
-    robot.place(sides.front)
+    placeOrFail(sides.front)
     -- It is possible that robot.back() always works, if the initial block
     -- was placed to an edge. To prevent this endless loop, we count
     -- the number of edges crossed since one round only includes 4 edges
     while robot.back() and edges < 5 do
-        robot.place(sides.front)
+        placeOrFail(sides.front)
         robot.turnLeft()
         if not robot.detect() then
             -- go around edge
             robot.forward()
             robot.turnRight()
             robot.turnRight()
-            robot.place(sides.front)
+            placeOrFail(sides.front)
             robot.turnLeft()
             edges = edges + 1
         end
