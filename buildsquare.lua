@@ -1,5 +1,8 @@
 robot = require("robot")
 sides = require("sides")
+local shell = require("shell")
+
+local args, options = shell.parse(...)
 
 -- Interesting API calls
 -- robot.inventorySize(): number
@@ -53,8 +56,9 @@ end
 -- detect
 --
 
-function build()
+function buildRound()
     robot.turnRight()
+    robot.place(sides.front)
     while robot.back() do
         robot.place(sides.front)
         robot.turnLeft()
@@ -62,15 +66,26 @@ function build()
             -- go around edge
             robot.forward()
             robot.turnRight()
+            robot.turnRight()
+            robot.place(sides.front)
+            robot.turnLeft()
         end
         robot.turnRight()
     end
 
     -- finished round
-    robot.up()
-    robot.placeDown()
+    robot.turnLeft()
+    robot.back()
+    robot.place()
 end
 
-build()
+rounds = 1
+if #args > 0 then
+    rounds = args[1]
+end
+
+for i = 1,rounds,1 do
+    buildRound()
+end
 
 io.write("finished!")
