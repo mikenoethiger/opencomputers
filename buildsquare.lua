@@ -4,20 +4,9 @@ local shell = require("shell")
 
 local args, options = shell.parse(...)
 
--- Interesting API calls
--- robot.inventorySize(): number
--- robot.space([slot: number]): number
--- robot.select()
--- left-click:
---   robotobot.swing([side: number, [sneaky:boolean]]): boolean[, string]
--- right-click:
---   robot.use([side: number[, sneaky: boolean[, duration: number]]]): boolean[, string]
--- robot.place([side: number[, sneaky: boolean]]): boolean[, string]
-
 function goToEdge()
-    -- go forward until air is below the robot
-    -- then go down one block
-    -- then turnRight() until solid block in front
+    -- go forward until air is below the robot, then go down one block,
+    -- then turnRight() until solid block in front.
     while robot.detectDown() do
         if not robot.forward() then
             return false
@@ -36,30 +25,14 @@ function turnUntilSolidInFront()
     return false
 end
 
-result = goToEdge()
-if not result then
-    io.write("could not find edge")
-    return
-end
-
-robot.down()
-
-if not turnUntilSolidInFront() then
-    io.write("could not find solid")
-    return
-end
-
--- turnRight
--- placeFront
--- back
--- turnLeft
--- detect
---
-
-function buildRound()
+function buildSquare()
+    edges = 0
     robot.turnRight()
     robot.place(sides.front)
-    while robot.back() do
+    -- It is possible that robot.back() always works, if the initial block
+    -- was placed to an edge. To prevent this endless loop, we count
+    -- the number of edges crossed since one round only includes 4 edges
+    while robot.back() and edges < 5 do
         robot.place(sides.front)
         robot.turnLeft()
         if not robot.detect() then
@@ -69,6 +42,7 @@ function buildRound()
             robot.turnRight()
             robot.place(sides.front)
             robot.turnLeft()
+            edges++
         end
         robot.turnRight()
     end
@@ -79,13 +53,30 @@ function buildRound()
     robot.place()
 end
 
+io.write("Finding edge...\n")
+
+if not goToEdge() then
+    io.write("Could not find edge\n")
+    return
+end
+
+robot.down()
+
+if not turnUntilSolidInFront() then
+    io.write("Could not find solid\n")
+    return
+end
+
 rounds = 1
 if #args > 0 then
     rounds = tonumber(args[1])
 end
 
+io.write("Starting to build (" .. rounds .. " rounds requested)")
+
 for i = 1,rounds,1 do
+    io.write(i .. ". round...\n")
     buildRound()
 end
 
-io.write("finished!")
+io.write("finished!\n")
