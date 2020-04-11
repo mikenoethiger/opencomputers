@@ -28,7 +28,7 @@ function turnUntilSolidInFront()
         if robot.detect() then
             return true
         end
-        robot.turn(true)
+        robot.turnLeft()
     end
     return false
 end
