@@ -55,6 +55,7 @@ function placeOrFail()
     if not robot.place(sides.front) then
         io.write("Could not place block: " .. reason .. ", aborting\n")
         os.exit()
+    end
 end
 
 function buildSquare()
