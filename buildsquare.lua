@@ -4,6 +4,13 @@ local shell = require("shell")
 
 local args, options = shell.parse(...)
 
+if #args < 1 then
+    io.write("Usage: buildsquare <rounds>\n")
+    io.write("    rounds: the number of rounds to make around the square\n")
+    io.write("Enlargens a platform by building squares around it. Place the robot onto the platform, with clear sight to an edge, then run this program.\n")
+    return
+end
+
 function goToEdge()
     -- go forward until air is below the robot, then go down one block,
     -- then turnRight() until solid block in front.
@@ -23,6 +30,31 @@ function turnUntilSolidInFront()
         robot.turnLeft()
     end
     return false
+end
+
+function ensureMaterialInSelectedSlot()
+    -- ensures that the selected slot contains some material.
+    -- returns false if no material left
+    if robot.count() then return true end
+    c = robot.count()
+    for i=1,c,1 do
+        if robot.count(i) then
+            robot.select(i)
+            return true
+        end
+    end
+    return false
+end
+
+function placeOrFail()
+    if not ensureMaterialInSelectedSlot() then
+        io.write("No material left in inventory, aborting.\n")
+        os.exit()
+    end
+    bool, reason = robot.place(sides.front)
+    if not robot.place(sides.front) then
+        io.write("Could not place block: " .. reason .. ", aborting\n")
+        os.exit()
 end
 
 function buildSquare()
